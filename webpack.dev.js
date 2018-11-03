@@ -1,6 +1,16 @@
-const webpack = require('webpack'); // eslint-disable-line
+/* eslint-disable import/no-extraneous-dependencies */
+
+/*
+ * TODO: Minimize js, css
+ * TODO: Make this THE config, not dev config
+ */
+
+const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // eslint-disable-line
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   mode: 'development',
@@ -14,7 +24,13 @@ module.exports = {
     publicPath: '/',
   },
   module: {
-    rules: [{ test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel-loader' }],
+    rules: [
+      { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel-loader' },
+      {
+        test: /\.less$/,
+        use: [devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+      },
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
@@ -31,9 +47,12 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
+    new MiniCssExtractPlugin({ filename: devMode ? '[name].css' : '[name].[hash].css' }),
     new HtmlWebpackPlugin({
       template: './src/templates/index.html',
       title: 'Kahoot Game Dev',
     }),
   ],
 };
+
+/* eslint-enable import/no-extraneous-dependencies */
