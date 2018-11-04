@@ -4,7 +4,7 @@ module.exports = (api) => {
     '@babel/preset-react',
     'airbnb',
   ];
-  const plugins = ['react-hot-loader/babel'];
+  const plugins = ['react-hot-loader/babel', '@babel/plugin-proposal-class-properties'];
 
   api.cache(true);
 
