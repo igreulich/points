@@ -2,21 +2,17 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import { AppContainer } from 'react-hot-loader';
+import configureStore from './scripts/store/configureStore';
+
 import App from './scripts/App';
 
-const render = () => {
-  ReactDOM.render(
-    <AppContainer>
-      <App />
-    </AppContainer>,
-    document.getElementById('app'),
-  );
-};
+const store = configureStore({});
 
-render();
-
-if (module.hot) {
-  module.hot.accept('./scripts/App', render);
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app'),
+);

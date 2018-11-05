@@ -1,4 +1,5 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 
 import '@babel/polyfill';
 import 'airbnb-browser-shims';
@@ -16,4 +17,4 @@ const App = () => (
   </Container>
 );
 
-export default App;
+export default hot(module)(App);

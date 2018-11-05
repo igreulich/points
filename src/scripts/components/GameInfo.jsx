@@ -1,12 +1,14 @@
 import React from 'react';
 
-import CollectionSection from './CollectionSection';
-import InfoSection from './InfoSection';
+import CollectionSectionContainer from '../containers/CollectionSectionContainer';
+// import CollectionSection from './CollectionSection';
+import InfoSectionContainer from '../containers/InfoSectionContainer';
+// import InfoSection from './InfoSection';
 
 const GameInfo = () => (
   <React.Fragment>
-    <CollectionSection />
-    <InfoSection />
+    <CollectionSectionContainer />
+    <InfoSectionContainer />
   </React.Fragment>
 );
 
