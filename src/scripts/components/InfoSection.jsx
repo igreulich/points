@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { Button, Segment, Table } from 'semantic-ui-react';
 
 const InfoSection = (props) => {
-  const { handleResetGame } = props;
+  const { handleResetGame, rows } = props;
+
+  const score = rows.reduce((acc, row) => acc + row.score, 0);
+  const bonus = rows.reduce((acc, row) => acc + row.bonus, 0);
 
   return (
     <Segment.Group>
@@ -13,11 +16,11 @@ const InfoSection = (props) => {
           <Table.Body>
             <Table.Row>
               <Table.Cell>Bonus Points:</Table.Cell>
-              <Table.Cell>30</Table.Cell>
+              <Table.Cell>{bonus}</Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>Total Points:</Table.Cell>
-              <Table.Cell>140</Table.Cell>
+              <Table.Cell>Total Score:</Table.Cell>
+              <Table.Cell>{score}</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
@@ -33,10 +36,19 @@ const InfoSection = (props) => {
 
 InfoSection.propTypes = {
   handleResetGame: PropTypes.func,
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      item: PropTypes.string.isRequired,
+      qty: PropTypes.number,
+      score: PropTypes.number,
+      bonus: PropTypes.number,
+    }),
+  ),
 };
 
 InfoSection.defaultProps = {
   handleResetGame: () => {},
+  rows: [],
 };
 
 export default InfoSection;

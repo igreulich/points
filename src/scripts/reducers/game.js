@@ -5,6 +5,7 @@ export const resetGame = createAction('RESET_GAME');
 
 const initialState = {
   selectedItems: [],
+  totalPoints: 0,
 };
 
 export const reducer = handleActions(
@@ -13,7 +14,7 @@ export const reducer = handleActions(
       ...state,
       selectedItems: [...state.selectedItems, action.payload],
     }),
-    [resetGame]: state => ({ ...state, selectedItems: [] }),
+    [resetGame]: () => ({ ...initialState }),
   },
   initialState,
 );

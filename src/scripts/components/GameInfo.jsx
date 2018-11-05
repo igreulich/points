@@ -1,15 +1,80 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import CollectionSectionContainer from '../containers/CollectionSectionContainer';
-// import CollectionSection from './CollectionSection';
-import InfoSectionContainer from '../containers/InfoSectionContainer';
-// import InfoSection from './InfoSection';
+import CollectionSection from './CollectionSection';
+import InfoSection from './InfoSection';
 
-const GameInfo = () => (
-  <React.Fragment>
-    <CollectionSectionContainer />
-    <InfoSectionContainer />
-  </React.Fragment>
-);
+const scoreCalc = (item, numberOfItems) => {
+  let full = 0;
+  let bonus = 0;
+  let score = 0;
+
+  if (item.bonusQty) {
+    full = Math.floor(numberOfItems / item.bonusQty) * item.bonus;
+    bonus = (numberOfItems % item.bonusQty) * item.points;
+
+    score = full + bonus;
+  } else {
+    score = item.points * numberOfItems;
+  }
+
+  return { score, bonus: score - numberOfItems * item.points };
+};
+
+class GameInfo extends React.Component {
+  static propTypes = {
+    handleResetGame: PropTypes.func,
+    selectedItems: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        points: PropTypes.number,
+        bonusQty: PropTypes.number,
+        bonus: PropTypes.number,
+      }).isRequired,
+    ),
+  };
+
+  static defaultProps = {
+    handleResetGame: () => {},
+    selectedItems: [],
+  };
+
+  createRows = () => {
+    const { selectedItems } = this.props;
+    const counts = {};
+
+    selectedItems.forEach((item) => {
+      if (counts[item.name] && counts[item.name].length) {
+        counts[item.name].push(item);
+      } else {
+        counts[item.name] = [item];
+      }
+    });
+
+    const rows = Object.entries(counts);
+
+    return rows.map((row) => {
+      const totals = scoreCalc(row[1][0], row[1].length);
+
+      return {
+        item: row[0],
+        qty: row[1].length,
+        score: totals.score,
+        bonus: totals.bonus,
+      };
+    });
+  };
+
+  render() {
+    const { handleResetGame } = this.props;
+
+    return (
+      <React.Fragment>
+        <CollectionSection rows={this.createRows()} />
+        <InfoSection rows={this.createRows()} handleResetGame={handleResetGame} />
+      </React.Fragment>
+    );
+  }
+}
 
 export default GameInfo;
