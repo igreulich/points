@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { Image } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
+import GameItemContainer from '../containers/GameItemContainer';
 
 import items from '../../data/items';
 
-const GameSurface = () => items.map(item => (
-  <Image
-    key={item.name}
-    src={`https://via.placeholder.com/150?text=${item.name}`}
-    spaced
-    bordered
-  />
-));
+const GameSurface = () => (
+  <Card.Group itemsPerRow={4}>
+    {items.map(item => (
+      <GameItemContainer key={item.name} item={item} />
+    ))}
+  </Card.Group>
+);
 
 export default GameSurface;
