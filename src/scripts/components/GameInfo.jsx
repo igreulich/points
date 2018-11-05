@@ -66,12 +66,39 @@ class GameInfo extends React.Component {
   };
 
   render() {
-    const { handleResetGame } = this.props;
+    const { selectedItems, handleResetGame } = this.props;
+
+    const createRows = (items) => {
+      const counts = {};
+
+      items.forEach((item) => {
+        if (counts[item.name] && counts[item.name].length) {
+          counts[item.name].push(item);
+        } else {
+          counts[item.name] = [item];
+        }
+      });
+
+      const rows = Object.entries(counts);
+
+      return rows.map((row) => {
+        const totals = scoreCalc(row[1][0], row[1].length);
+
+        return {
+          item: row[0],
+          qty: row[1].length,
+          score: totals.score,
+          bonus: totals.bonus,
+        };
+      });
+    };
+
+    const rows = createRows(selectedItems);
 
     return (
       <React.Fragment>
-        <CollectionSection rows={this.createRows()} />
-        <InfoSection rows={this.createRows()} handleResetGame={handleResetGame} />
+        <CollectionSection rows={rows} />
+        <InfoSection rows={rows} handleResetGame={handleResetGame} />
       </React.Fragment>
     );
   }
